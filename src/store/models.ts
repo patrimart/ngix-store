@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/empty";
 
 import { IterableX } from "ix/iterable";
-import { of } from "ix/iterable/of";
+import { of }        from "ix/iterable/of";
 
 import { Action } from "@ngrx/store";
 

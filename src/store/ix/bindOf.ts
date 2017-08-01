@@ -1,10 +1,6 @@
 
 import { IterableX } from "ix/iterable";
 import { of } from "ix/iterable/of";
-// import "ix/add/iterable-operators/map";
-// import "ix/add/iterable-operators/chain";
-// import "ix/add/iterable-operators/foreach";
-// import { map } from "ix/iterable/map";
 
 /**
  * Bind an array of curried IX operators.
@@ -18,6 +14,11 @@ export function bindOf <S, R = S> (
     }
 }
 
+
+// import "ix/add/iterable-operators/map";
+// import "ix/add/iterable-operators/chain";
+// import "ix/add/iterable-operators/foreach";
+// import { map } from "ix/iterable/map";
 
 // const cMap = c<number>(map, (i: any) => i + i);
 // const comp = [cMap, cMap, cMap];
