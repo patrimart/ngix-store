@@ -24,12 +24,12 @@ export const ERR_VAL = Symbol();
 /**
  * Builds a curried function to get the value of the lens focus.
  */
-export function view <S, R = S> (lens: Lens): (state: S) => R | symbol {
+export function view <S, R = S> (lns: Lens): (state: S) => R | symbol {
 
     return function (state: S): R | symbol {
         let accState: any = state;
-        for (let i = 0, len = lens.length; i < len; i++) {
-            const prop = lens[i];
+        for (let i = 0, len = lns.length; i < len; i++) {
+            const prop = lns[i];
             if (prop in accState === false) {
                 return ERR_VAL;
             }
@@ -44,9 +44,9 @@ export function view <S, R = S> (lens: Lens): (state: S) => R | symbol {
  * New objects are created and frozen as the lens walks the object tree.
  * If the path to the focus does not exist, that same state reference will be returned.
  */
-export function set <S> (lens: Lens): <R>(val: R) => (state: S) => S {
+export function set <S> (lns: Lens): <R>(val: R) => (state: S) => S {
 
-    return <R>(val: R) => over<S>(lens)(_ => val)
+    return <R>(val: R) => over<S>(lns)(_ => val)
 }
 
 /**
@@ -54,15 +54,15 @@ export function set <S> (lens: Lens): <R>(val: R) => (state: S) => S {
  * New objects are created and frozen as the lens walks the object tree.
  * If the path to the focus does not exist, that same state reference will be returned.
  */
-export function over <S> (lens: Lens) {
+export function over <S> (lns: Lens) {
 
     return <R>(fn: (s: R) => R) => (state: S): S => {
 
         const origState: S = Object.freeze(Array.isArray(state) ? state.slice(0) : { ...state as any });
         let ms: any = origState;
 
-        for (let i = 0, len = lens.length; i < len; i++) {
-            const k = lens[i];
+        for (let i = 0, len = lns.length; i < len; i++) {
+            const k = lns[i];
             if (k in ms === false) { return state; }
             ms = ms[k] = Object.freeze(len - i - 1 ? Array.isArray(ms[k]) ? ms[k].slice(0) : { ...ms[k] } : fn(ms[k]))
         }

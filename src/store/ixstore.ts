@@ -12,11 +12,11 @@ import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
 
-import { IterableX } from "ix/iterable";
-import { of }        from "ix/iterable/of";
-import "ix/add/iterable-operators/chain";
-import "ix/add/iterable-operators/map";
-import "ix/add/iterable-operators/reduce";
+import { IterableX } from "@ngix/ix/iterable";
+import { of }        from "@ngix/ix/iterable/of";
+import "@ngix/ix/add/iterable-operators/chain";
+import "@ngix/ix/add/iterable-operators/map";
+import "@ngix/ix/add/iterable-operators/reduce";
 
 import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "@ngrx/store";
 

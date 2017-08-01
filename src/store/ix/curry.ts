@@ -1,10 +1,10 @@
 
-import { IterableX } from "ix/iterable";
+import { IterableX } from "@ngix/ix/iterable";
 
 /**
  * Convert an Ix operator into a curried function.
  */
-export function c <S, R = S> (op: (s: Iterable<S>, ...args: any[]) => IterableX<R>, ...args: any[]) {
+export function curry <S, R = S> (op: (s: Iterable<S>, ...args: any[]) => IterableX<R>, ...args: any[]) {
 
     return (source: Iterable<S>) => op(source, ...args);
 }

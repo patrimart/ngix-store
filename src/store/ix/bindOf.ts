@@ -1,6 +1,6 @@
 
-import { IterableX } from "ix/iterable";
-import { of } from "ix/iterable/of";
+import { IterableX } from "@ngix/ix/iterable";
+import { of } from "@ngix/ix/iterable/of";
 
 /**
  * Bind an array of curried IX operators.

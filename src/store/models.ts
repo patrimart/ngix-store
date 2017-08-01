@@ -2,14 +2,14 @@
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/empty";
 
-import { IterableX } from "ix/iterable";
-import { of }        from "ix/iterable/of";
+import { IterableX } from "@ngix/ix/iterable";
+import { of }        from "@ngix/ix/iterable/of";
 
 import { Action } from "@ngrx/store";
 
 import { Lens } from "./lens";
 
-export const ACTION = "[@ngix/action]";
+export const ACTION = "[@ngix/store/action]";
 
 /**
  * Action for ngix.
