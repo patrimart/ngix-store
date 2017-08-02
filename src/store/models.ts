@@ -14,13 +14,13 @@ export const ACTION = "[@ngix/store/action]";
 /**
  * Action for ngix.
  */
-export class IxAction <S, R = S> implements Action {
+export class IxAction <S, R> implements Action {
 
     public readonly type: string;
 
     constructor (
         public readonly lens: Lens,
-        public readonly transformer: (state?: Iterable<S>) => IterableX<R>,
+        public readonly transformer: (state: Iterable<S>) => IterableX<R>,
         public readonly observable = (optimisticState: R) => Observable.empty<R>(),
         public readonly undo = (optimisticState: R) => of<S>(optimisticState as any),
     ) {

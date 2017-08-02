@@ -8,6 +8,7 @@ import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/first";
 import "rxjs/add/operator/mergeMap";
+import "rxjs/add/operator/pluck";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
@@ -22,6 +23,7 @@ import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "
 
 import { view, Lens, ERR_VAL } from "./lens";
 import { IxAction, ACTION }    from "./models";
+import { IX_REDUCER_STORE }    from "./reducer";
 
 
 @Injectable()
@@ -35,9 +37,10 @@ export class IxStore<S> extends Store<S> {
         super(state$, ao, rm);
     }
 
-    public lens <R> (lens: Lens): IxStore<R> {
+    public view <R> (lens: Lens): IxStore<R> {
 
         return this.state$
+            .pluck<any, any>(IX_REDUCER_STORE)
             .map<S, R>(s => {
                 const st = view<S, R>(lens)(s);
                 return (st === ERR_VAL ? s : st) as R;
@@ -51,14 +54,15 @@ export class IxStore<S> extends Store<S> {
         return store;
     }
 
-    public dispatchIx <S, R = S> (action: IxAction<S, R>): Observable<R> {
+    public dispatchIx <R = S> (action: IxAction<S, R>): Observable<R> {
 
         let optState: any;
 
         const obs = this.state$
-            .first<any>()
+            .pluck(IX_REDUCER_STORE)
+            .first()
             .map(state => of(state)
-                .map(view(action.lens))
+                .map<any, any>(view(action.lens))
                 // If lens errors, abort with error.
                 .chain(action.transformer)
                 .reduce<R>((_, s) => s)

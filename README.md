@@ -21,7 +21,91 @@ Install @ngix/store from npm:
 
 `npm install @ngix/store --save`
 
-### Docs and Examples Coming Soon
+### Setup
+This is the simple example from `@ngrx/store` reworked to use `@ngix/store`.
+
+First, setup of the reducer is omitted since `@ngix/store` has one agnostic recuder.
+
+Second, very much like the original example, register the state container within your application, import the `createIxReducer` and use the `StoreModule.forRoot`.
+
+```ts
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+
+import { StoreModule } from "@ngrx/store";
+import { IXSTORE_PROVIDERS } from "@ngix/store/ixstore";
+import { createIxReducer } from "@ngix/store/reducer";
+
+import { AppComponent } from "./app.component";
+
+@NgModule({
+  declarations: [ AppComponent ],
+  imports: [
+    BrowserModule,
+    StoreModule.forRoot({ ...createIxReducer({ counter: 0 }) })
+  ],
+  providers: [ IXSTORE_PROVIDERS ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {}
+```
+
+Finally, inject the `IxStore` service into your components and services. Use `store.view(Lens)` to _focus_ on slice(s) of state. Here you see another fundemental difference between `@ngrx/store` and `@ngix/store`: instead of your logic being off in a reducer where you send potentially stale state, you compose functions and dispatch them to be lazily evaluated in the IxReducer.
+
+```ts
+import { Component } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+
+import { IterableX } from "@ngix/ix/iterable";
+import { map } from "@ngix/ix/iterable/map";
+
+import { IxStore } from "@ngix/store/ixstore";
+import { IxAction } from "@ngix/store/models";
+import { lens  } from "@ngix/store/lens";
+import { bindFrom, curry as c } from "@ngix/store/ix";
+
+export interface AppState {
+  counter: number;
+}
+
+export const INCREMENT = c(map, (i: number) => i + 1);
+export const DECREMENT = c(map, (i: number) => i - 1);
+export const RESET = c(map, () => 0);
+
+@Component({
+  selector: "app-root",
+  template: `
+    <button (click)="increment()">Increment</button>
+    <div>Current Count: {{ counter | async }}</div>
+    <button (click)="decrement()">Decrement</button>
+
+    <button (click)="reset()">Reset Counter</button>
+  `,
+})
+export class AppComponent {
+
+  public counter: Observable<number>;
+  public counterLens = lens("counter");
+
+  public constructor(private store: IxStore<AppState>) {
+    this.counter = this.store.view(this.counterLens);
+  }
+
+  public increment () {
+    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(INCREMENT)));
+  }
+
+  public decrement () {
+    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(DECREMENT)));
+  }
+
+  public reset () {
+    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(RESET)));
+  }
+}
+```
+
+### More Docs and Examples Coming Soon
 
 Stay tuned...
 

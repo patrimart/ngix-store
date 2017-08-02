@@ -58,7 +58,7 @@ export function over <S> (lns: Lens) {
 
     return <R>(fn: (s: R) => R) => (state: S): S => {
 
-        const origState: S = Object.freeze(Array.isArray(state) ? state.slice(0) : { ...state as any });
+        const origState: S = Array.isArray(state) ? state.slice(0) : { ...state as any };
         let ms: any = origState;
 
         for (let i = 0, len = lns.length; i < len; i++) {
@@ -67,6 +67,6 @@ export function over <S> (lns: Lens) {
             ms = ms[k] = Object.freeze(len - i - 1 ? Array.isArray(ms[k]) ? ms[k].slice(0) : { ...ms[k] } : fn(ms[k]))
         }
 
-        return origState;
+        return Object.freeze(origState);
     }
 }

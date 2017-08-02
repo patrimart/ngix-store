@@ -6,8 +6,8 @@ import "@ngix/ix/add/iterable-operators/chain";
 /**
  * Bind an array of curried IX operators.
  */
-export function bindFrom <S, R = S> (
-    fn: (source: Iterable<S>) => IterableX<any> = id => id as any,
+export function bindFrom <S, R> (
+    fn: (source: Iterable<any>) => IterableX<R> = id => id as any,
     ...fns: Array<(source: Iterable<any>) => IterableX<any>>
 ) {
     return function (source: Iterable<S>): IterableX<R> {
