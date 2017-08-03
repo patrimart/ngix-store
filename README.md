@@ -17,16 +17,18 @@ Core tenents:
 - Functions, functions, functions.
 
 ### Installation
+
 Install @ngix/store from npm:
 
-`npm install @ngix/store --save`
+`npm i @ngix/store @ngix/ix -S`
 
 ### Setup
+
 This is the simple example from `@ngrx/store` reworked to use `@ngix/store`.
 
 First, setup of the reducer is omitted since `@ngix/store` has one agnostic recuder.
 
-Second, very much like the original example, register the state container within your application, import the `createIxReducer` and use the `StoreModule.forRoot`.
+Second, very much like the original example, register the state container within your application, use the `IxStoreModule.forRoot()`.
 
 ```ts
 import { BrowserModule } from "@angular/platform-browser";
