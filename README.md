@@ -34,7 +34,6 @@ Second, very much like the original example, register the state container within
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
-import { StoreModule } from "@ngrx/store";
 import { IxStoreModule } from "@ngix/store";
 
 import { AppComponent } from "./app.component";
@@ -50,7 +49,7 @@ import { AppComponent } from "./app.component";
 export class AppModule {}
 ```
 
-Finally, inject the `IxStore` service into your components and services. Use `store.view(Lens)` to _focus_ on slice(s) of state. Here you see another fundemental difference between `@ngrx/store` and `@ngix/store`: instead of your logic being off in a reducer where you send potentially stale state, you compose functions and dispatch them to be lazily evaluated in the IxReducer.
+Finally, inject the `IxStore` service into your components and services. Use `store.view(Lens)` to _focus_ on slice(s) of state. Here you see another fundemental difference between `@ngrx/store` and `@ngix/store`: instead of your logic being off in a reducer where you send potentially stale state, you compose functions and dispatch them to be lazily evaluated in the IxReducer with the latest state.
 
 ```ts
 import { Component } from "@angular/core";
