@@ -3,8 +3,7 @@ import { NgModule } from "@angular/core";
 
 import { StoreModule } from "@ngrx/store";
 
-import { IXSTORE_PROVIDERS } from "../store/ixstore";
-import { createIxReducer } from "../store/reducer";
+import { IxStoreModule } from "../store/ixstoremodule";
 
 import { AppComponent } from "./app.component";
 
@@ -15,11 +14,7 @@ import { AppComponent } from "./app.component";
   ],
   imports: [
     BrowserModule,
-    // TODO IxStoreModule.forRoot({ ...createIxReducer({ counter: 0 }) }), // Which has StoreModule.forRoot in it.
-    StoreModule.forRoot({ ...createIxReducer({ counter: 0 }) })
-  ],
-  providers: [
-    IXSTORE_PROVIDERS, // This will go into IxStoreModule
+    IxStoreModule.forRoot(),
   ],
   bootstrap: [AppComponent]
 })

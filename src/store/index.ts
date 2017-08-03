@@ -4,5 +4,6 @@ import * as lens from "./lens";
 
 export { ix, lens };
 export * from "./ixstore";
+export * from "./ixstoremodule";
 export * from "./models";
-export * from "./reducer";
+export * from "./ixreducer";

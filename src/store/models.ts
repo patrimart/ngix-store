@@ -11,19 +11,31 @@ import { Lens } from "./lens";
 
 export const ACTION = "[@ngix/store/action]";
 
+const DEFAULT_OBS = <R> (optimisticState: R) => Observable.empty<R>();
+const DEFAULT_UNDO = <S, R> (optimisticState: R) => of<S>(optimisticState as any);
+
 /**
- * Action for ngix.
+ * IxAction interface for ngix.
  */
-export class IxAction <S, R> implements Action {
+export interface IxAction <S, R> extends Action {
+    readonly type: string;
+    readonly lens: Lens;
+    readonly transformer: (state: Iterable<S>) => IterableX<R>;
+    readonly observable: (optimisticState: R) => Observable<R>;
+    readonly undo: (optimisticState: R) => IterableX<S>;
+}
 
-    public readonly type: string;
+/**
+ * IxAction factory function: Lens -> (f t -> f o -> f u) -> IxAction
+ */
+export function ixAction (lens: Lens) {
 
-    constructor (
-        public readonly lens: Lens,
-        public readonly transformer: (state: Iterable<S>) => IterableX<R>,
-        public readonly observable = (optimisticState: R) => Observable.empty<R>(),
-        public readonly undo = (optimisticState: R) => of<S>(optimisticState as any),
-    ) {
-        this.type = `${ACTION} ${this.lens.join("/")}`;
+    return function <S, R> (
+        transformer: (state: Iterable<any>) => IterableX<R>,
+        type = `${ACTION} ${lens.join("/")}`,
+        observable = DEFAULT_OBS,
+        undo = DEFAULT_UNDO,
+    ): IxAction <S, R> {
+        return { type, lens, transformer, observable, undo };
     }
 }

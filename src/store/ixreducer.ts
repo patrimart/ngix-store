@@ -5,11 +5,11 @@ import { of } from "@ngix/ix/iterable/of";
 import { IxAction, ACTION } from "./models";
 
 
-export const IX_REDUCER_STORE = "[@ngix/store]";
+export const IX_REDUCER_NAME = "[@ngix/store]";
 
 export function createIxReducer (initState: any) {
 
-    return { [IX_REDUCER_STORE]: function ixReducer (state= initState, action: IxAction<any, any>) {
+    return { [IX_REDUCER_NAME]: function ixReducer (state= initState, action: IxAction<any, any>) {
 
         switch (action.type.startsWith(ACTION)) {
 

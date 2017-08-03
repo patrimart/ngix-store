@@ -33,8 +33,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { StoreModule } from "@ngrx/store";
-import { IXSTORE_PROVIDERS } from "@ngix/store/ixstore";
-import { createIxReducer } from "@ngix/store/reducer";
+import { IxStoreModule } from "@ngix/store";
 
 import { AppComponent } from "./app.component";
 
@@ -42,9 +41,8 @@ import { AppComponent } from "./app.component";
   declarations: [ AppComponent ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({ ...createIxReducer({ counter: 0 }) })
+    IxStoreModule.forRoot(),
   ],
-  providers: [ IXSTORE_PROVIDERS ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {}
@@ -59,18 +57,15 @@ import { Observable } from "rxjs/Observable";
 import { IterableX } from "@ngix/ix/iterable";
 import { map } from "@ngix/ix/iterable/map";
 
-import { IxStore } from "@ngix/store/ixstore";
-import { IxAction } from "@ngix/store/models";
-import { lens  } from "@ngix/store/lens";
-import { bindFrom, curry as c } from "@ngix/store/ix";
+import { IxStore, IxAction, lens, ix } from "@ngix/store";
 
 export interface AppState {
   counter: number;
 }
 
-export const INCREMENT = c(map, (i: number) => i + 1);
-export const DECREMENT = c(map, (i: number) => i - 1);
-export const RESET = c(map, () => 0);
+export const INCREMENT = ix.curry(map, (i: number) => i + 1);
+export const DECREMENT = ix.curry(map, (i: number) => i - 1);
+export const RESET = ix.curry(map, () => 0);
 
 @Component({
   selector: "app-root",
@@ -85,22 +80,22 @@ export const RESET = c(map, () => 0);
 export class AppComponent {
 
   public counter: Observable<number>;
-  public counterLens = lens("counter");
+  public counterLens = lens.lens("counter");
 
   public constructor(private store: IxStore<AppState>) {
     this.counter = this.store.view(this.counterLens);
   }
 
   public increment () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(INCREMENT)));
+    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(INCREMENT)));
   }
 
   public decrement () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(DECREMENT)));
+    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(RESET)));
+    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(RESET)));
   }
 }
 ```

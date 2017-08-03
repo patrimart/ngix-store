@@ -6,9 +6,9 @@ import { IterableX } from "@ngix/ix/iterable";
 import { map } from "@ngix/ix/iterable/map";
 
 import { IxStore } from "../store/ixstore";
-import { IxAction } from "../store/models";
+import { ixAction, IxAction } from "../store/models";
 import { lens  } from "../store/lens";
-import { bindFrom, curry as c } from "../store/ix";
+import { bindFrom as bf, curry as c } from "../store/ix";
 
 
 export interface AppState {
@@ -16,40 +16,41 @@ export interface AppState {
 }
 
 
-export const INCREMENT = c(map, (i: number) => i + 1);
-export const DECREMENT = c(map, (i: number) => i - 1);
-export const RESET = c(map, () => 0);
+export const COUNTER_LENS = lens("counter");
+export const ca = ixAction(COUNTER_LENS);
+export const INCREMENT = c<number>(map, i => i + 1);
+export const DECREMENT = c<number>(map, i => i - 1);
+export const RESET = c<number>(map, () => 0);
 
 
 @Component({
   selector: "app-root",
   template: `
-    <button (click)="increment()">Increment</button>
     <div>Current Count: {{ counter | async }}</div>
-    <button (click)="decrement()">Decrement</button>
+    <button (click)="increment()">+</button>
+    <button (click)="decrement()">-</button>
 
-    <button (click)="reset()">Reset Counter</button>
+    <button (click)="reset()">Reset</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
 
   public counter: Observable<number>;
-  public counterLens = lens("counter");
 
   public constructor(private store: IxStore<AppState>) {
-    this.counter = this.store.view(this.counterLens);
+    this.counter = this.store.view(COUNTER_LENS);
   }
 
   public increment () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(INCREMENT)));
+    this.store.dispatchIx(ca(bf(INCREMENT)));
   }
 
   public decrement () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(DECREMENT)));
+    this.store.dispatchIx(ca(bf(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(new IxAction(this.counterLens, bindFrom(RESET)));
+    this.store.dispatchIx(ca(bf(RESET)));
   }
 }
