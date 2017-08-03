@@ -58,7 +58,7 @@ import { Observable } from "rxjs/Observable";
 import { IterableX } from "@ngix/ix/iterable";
 import { map } from "@ngix/ix/iterable/map";
 
-import { IxStore, IxAction, lens, ix } from "@ngix/store";
+import { IxStore, ixAction, IxAction, lens, ix } from "@ngix/store";
 
 export interface AppState {
   counter: number;
@@ -88,15 +88,15 @@ export class AppComponent {
   }
 
   public increment () {
-    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(INCREMENT)));
+    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(INCREMENT)));
   }
 
   public decrement () {
-    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(DECREMENT)));
+    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(new IxAction(this.counterLens, ix.bindFrom(RESET)));
+    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(RESET)));
   }
 }
 ```
