@@ -65,9 +65,9 @@ export interface AppState {
   counter: number;
 }
 
-export const INCREMENT = ix.curry(map, (i: number) => i + 1);
-export const DECREMENT = ix.curry(map, (i: number) => i - 1);
-export const RESET = ix.curry(map, () => 0);
+export const INCREMENT = ix.curry<number>(map, i => i + 1);
+export const DECREMENT = ix.curry<number>(map, i => i - 1);
+export const RESET = ix.curry<number>(map, () => 0);
 
 @Component({
   selector: "app-root",
