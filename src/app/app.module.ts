@@ -1,7 +1,6 @@
+
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-
-import { StoreModule } from "@ngrx/store";
 
 import { IxStoreModule } from "../store/ixstoremodule";
 
@@ -14,8 +13,8 @@ import { AppComponent } from "./app.component";
   ],
   imports: [
     BrowserModule,
-    IxStoreModule.forRoot(),
+    IxStoreModule.forRoot({ counter: 0 }),
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

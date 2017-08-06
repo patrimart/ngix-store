@@ -26,7 +26,7 @@ export const RESET = lift<number>(map, () => 0);
 @Component({
   selector: "app-root",
   template: `
-    <div>Current Count: {{ counter | async }}</div>
+    <div>Current Count: {{ counter | async | json }}</div>
     <button (click)="increment()">+</button>
     <button (click)="decrement()">-</button>
 

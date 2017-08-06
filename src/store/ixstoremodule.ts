@@ -16,30 +16,54 @@ import {
 } from "@ngrx/store/src/store_module";
 
 import { IX_STORE_PROVIDERS } from "../store/ixstore";
-import { createIxReducer } from "./ixreducer";
+import { ixMetaReducer } from "./ixreducer";
 
 
 @NgModule({})
 export class IxStoreModule {
 
-    public static forRoot <T, V extends Action = Action> (
+    /**
+     * @ngix/store alternative to @ngrx/store StoreModule.forRoot.
+     * @param initIxState - The initial state for the IxStore.
+     * @param [reducers]
+     * @param [config]
+     */
+    public static forRoot <S extends { [key: string]: any }, T, V extends Action = Action> (
+        initIxState: S,
         reducers?: ActionReducerMap<T, V> | InjectionToken<ActionReducerMap<T, V>>,
-        config: StoreConfig<T, V> = {},
+        config?: StoreConfig<T, V>,
     ): ModuleWithProviders {
         // TODO This `reducers` may not be valid.
-        const module = StoreModule.forRoot({ ...createIxReducer({ counter: 0 }), ...reducers as any }, config);
+        const metaReducers = [ ixMetaReducer ].concat(config && config.metaReducers || [] as any);
+        const ixReducers = Object.keys(initIxState).reduce(
+            (p: any, k: string) => ({ ...p, [k]: (s = initIxState[k]) => s }),
+            reducers || {},
+        );
+        const module = StoreModule.forRoot(ixReducers, Object.assign({}, config, { metaReducers }));
         module.providers = (module.providers || []).concat(IX_STORE_PROVIDERS);
         return module;
     }
 
-
-    static forFeature <T, V extends Action = Action> (
+    /**
+     * @ngix/store alternative to @ngrx/store StoreModule.forFeature.
+     * @param featureName
+     * @param initIxState - The initial state for the IxStore.
+     * @param [reducers]
+     * @param [config]
+     */
+    static forFeature <S extends { [key: string]: any }, T, V extends Action = Action> (
         featureName: string,
+        initIxState: S,
         reducer?: ActionReducerMap<T, V> | ActionReducer<T, V>,
-        config: StoreConfig<T, V> = {},
+        config?: StoreConfig<T, V>,
     ): ModuleWithProviders {
         // TODO This `reducer` may not be valid.
-        const module = StoreModule.forFeature(featureName, { ...createIxReducer({ counter: 0 }), ...reducer as any }, config);
+        const metaReducers = [ ixMetaReducer ].concat(config && config.metaReducers || [] as any);
+        const ixReducers = Object.keys(initIxState).reduce(
+            (p: any, k: string) => ({ ...p, [k]: (s = initIxState[k]) => s }),
+            reducer || {},
+        );
+        const module = StoreModule.forFeature(featureName, ixReducers, Object.assign({}, config, { metaReducers }));
         module.providers = (module.providers || []).concat(IX_STORE_PROVIDERS);
         return module;
     }

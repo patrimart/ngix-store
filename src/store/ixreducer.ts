@@ -1,23 +1,20 @@
 
+import { Action, ActionReducer } from "@ngrx/store";
+
 import { set } from "./lens";
 import { of } from "@ngix/ix/iterable/of";
 
 import { IxAction, ACTION } from "./models";
 
 
-export const IX_REDUCER_NAME = "[@ngix/store]";
+export function ixMetaReducer <T, V extends Action = Action> (reducer: ActionReducer<T, V>) {
 
-export function createIxReducer (initState: any) {
+    return function <R> (state: T, action: IxAction<T, R>) {
 
-    return { [IX_REDUCER_NAME]: function ixReducer (state= initState, action: IxAction<any, any>) {
-
-        switch (action.type.startsWith(ACTION)) {
-
-            case true:
-                return set(action.lens)(action.transformer(of(state)).reduce((_, s) => s))(state);
-
-            default:
-                return state;
+        if (state !== undefined && "lens" in action) {
+            state = set<T>(action.lens)(action.transformer(of(state)).reduce((_, s) => s))(state);
         }
-    }}
+
+        return reducer(state, action as any);
+    }
 }

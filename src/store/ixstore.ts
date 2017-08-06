@@ -9,7 +9,6 @@ import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/first";
 import "rxjs/add/operator/concatMap";
-import "rxjs/add/operator/pluck";
 import "rxjs/add/operator/subscribeOn";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/map";
@@ -25,7 +24,6 @@ import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "
 
 import { view, Lens, ERR_VAL }        from "./lens";
 import { ixAction, IxAction, ACTION } from "./models";
-import { IX_REDUCER_NAME }            from "./ixreducer";
 
 
 @Injectable()
@@ -41,11 +39,12 @@ export class IxStore<S> extends Store<S> {
 
     public view <R> (lens: Lens): IxStore<R> {
 
+        const viewLens = view<S, R>(lens);
         return this.state$
-            .pluck<any, any>(IX_REDUCER_NAME)
             .map<S, R>(s => {
-                const st = view<S, R>(lens)(s);
-                return (st === ERR_VAL ? s : st) as R;
+                const st = viewLens(s);
+                if (st === ERR_VAL) { throw new Error(`The lens (${lens.join(".")}) could not resolve.`); }
+                return st as R;
             })
             .distinctUntilChanged() as IxStore<R>;
     }
@@ -61,7 +60,6 @@ export class IxStore<S> extends Store<S> {
         let optState: any;
 
         const obs = this.state$
-            .pluck(IX_REDUCER_NAME)
             .first()
             .map(state => of(state)
                 .map<any, any>(view(action.lens))

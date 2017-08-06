@@ -26,16 +26,16 @@ export interface IxAction <S, R> extends Action {
 }
 
 /**
- * IxAction factory function: Lens -> (f t -> f o -> f u) -> IxAction
+ * IxAction factory function.
  */
 export function ixAction (lens: Lens) {
 
     return function <S, R> (
         transformer: (state: Iterable<any>) => IterableX<R>,
-        type = `${ACTION} ${lens.join("/")}`,
+        type = lens.join("/"),
         observable = DEFAULT_OBS,
         undo = DEFAULT_UNDO,
     ): IxAction <S, R> {
-        return { type, lens, transformer, observable, undo };
+        return { type: `${ACTION} ${type}`, lens, transformer, observable, undo };
     }
 }
