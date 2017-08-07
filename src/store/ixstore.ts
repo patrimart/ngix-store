@@ -3,16 +3,16 @@ import { Injectable, Inject, Provider } from "@angular/core";
 
 import { Observable } from "rxjs/Observable";
 import { Operator }   from "rxjs/Operator";
-import { Subject }    from "rxjs/Subject";
 import { async }      from "rxjs/scheduler/async";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/first";
+import "rxjs/add/observable/of";
+import "rxjs/add/operator/catch";
 import "rxjs/add/operator/concatMap";
-import "rxjs/add/operator/subscribeOn";
-import "rxjs/add/operator/startWith";
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
+import "rxjs/add/operator/startWith";
+import "rxjs/add/operator/subscribeOn";
 
 import { IterableX } from "@ngix/ix/iterable";
 import { of }        from "@ngix/ix/iterable/of";
@@ -57,28 +57,32 @@ export class IxStore<S> extends Store<S> {
 
     public dispatchIx <R = S> (action: IxAction<S, R>): Observable<R> {
 
-        let optState: any;
+        const stateView = view(action.lens);
 
-        const obs = this.state$
-            .first()
-            .map(state => of(state)
-                .map<any, any>(view(action.lens))
-                // If lens errors, abort with error.
-                .chain(action.transformer)
-                .reduce<R>((_, s) => s)
+        const obs = this.state$.first()
+            .map(s => [
+                s, of(s)
+                    .map<any, any>(stateView)
+                    .chain(action.update)
+                    .reduce((__, o) => o),
+            ])
+            .concatMap(([s, o]) =>
+                action.commit(o)
+                    .catch(() => Observable.of(of(s)
+                        .map<any, any>(stateView)
+                        .chain(action.rollback || (() => of(s)))
+                        .reduce((__, oo) => oo)),
+                    )
+                    .startWith(o),
             )
-            .do(state => optState = state)
-            .concatMap<R, R>(state => action.observable(state).startWith(state))
             .subscribeOn(async) // To allow sub-tick cleanup after a dispatchIx.
-            .share<R>();
+            .share();
 
-        obs.subscribe(
-            payload => super.dispatch(ixAction(action.lens)(() => of(payload))),
-            err => super.dispatch(ixAction(action.lens)(() => of(optState))),
-        );
+        obs.subscribe(s => super.dispatch(ixAction(action.lens)(() => of(s))));
 
         return obs;
     }
 }
 
 export const IX_STORE_PROVIDERS: Provider[] = [IxStore];
+

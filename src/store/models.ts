@@ -11,8 +11,8 @@ import { Lens } from "./lens";
 
 export const ACTION = "[@ngix/store/action]";
 
-const DEFAULT_OBS = <R> (optimisticState: R) => Observable.empty<R>();
-const DEFAULT_UNDO = <S, R> (optimisticState: R) => of<S>(optimisticState as any);
+const DEFAULT_COMMIT = <R> (optimisticState: R) => Observable.empty<R>();
+const DEFAULT_ROLLBACK = <S, R> (currentState: S) =>  (optimisticState: R) => of(currentState);
 
 /**
  * IxAction interface for ngix.
@@ -20,9 +20,9 @@ const DEFAULT_UNDO = <S, R> (optimisticState: R) => of<S>(optimisticState as any
 export interface IxAction <S, R> extends Action {
     readonly type: string;
     readonly lens: Lens;
-    readonly transformer: (state: Iterable<S>) => IterableX<R>;
-    readonly observable: (optimisticState: R) => Observable<R>;
-    readonly undo: (optimisticState: R) => IterableX<S>;
+    readonly update: (state: Iterable<S>) => IterableX<R>;
+    readonly commit: (optimisticState: R) => Observable<R>;
+    readonly rollback?: (state: Iterable<R>) => IterableX<S>;
 }
 
 /**
@@ -31,11 +31,11 @@ export interface IxAction <S, R> extends Action {
 export function ixAction (lens: Lens) {
 
     return function <S, R> (
-        transformer: (state: Iterable<any>) => IterableX<R>,
+        update: (state: Iterable<any>) => IterableX<R>,
         type = lens.join("/"),
-        observable = DEFAULT_OBS,
-        undo = DEFAULT_UNDO,
+        commit = DEFAULT_COMMIT,
+        rollback?: (state: Iterable<R>) => IterableX<S>,
     ): IxAction <S, R> {
-        return { type: `${ACTION} ${type}`, lens, transformer, observable, undo };
+        return { type: `${ACTION} ${type}`, lens, update, commit, rollback };
     }
 }

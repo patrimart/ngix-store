@@ -12,7 +12,7 @@ export function ixMetaReducer <T, V extends Action = Action> (reducer: ActionRed
     return function <R> (state: T, action: IxAction<T, R>) {
 
         if (state !== undefined && "lens" in action) {
-            state = set<T>(action.lens)(action.transformer(of(state)).reduce((_, s) => s))(state);
+            state = set<T>(action.lens)(action.update(of(state)).reduce((_, s) => s))(state);
         }
 
         return reducer(state, action as any);
