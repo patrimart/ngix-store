@@ -3,6 +3,8 @@ import { Injectable, Inject, Provider } from "@angular/core";
 
 import { Observable } from "rxjs/Observable";
 import { Operator }   from "rxjs/Operator";
+import { Subject }     from "rxjs/Subject";
+import { Subscription }     from "rxjs/Subscription";
 import { async }      from "rxjs/scheduler/async";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
@@ -13,6 +15,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/subscribeOn";
+import "rxjs/add/operator/withLatestFrom";
 
 import { IterableX } from "@ngix/ix/iterable";
 import { of }        from "@ngix/ix/iterable/of";
@@ -28,6 +31,9 @@ import { ixAction, IxAction, ACTION } from "./models";
 
 @Injectable()
 export class IxStore<S> extends Store<S> {
+
+    private syncSubject: Subject<IxAction<S, any>>;
+    private syncSubscription: Subscription;
 
     constructor(
         @Inject(StateObservable) private state$: StateObservable,
@@ -55,34 +61,24 @@ export class IxStore<S> extends Store<S> {
         return store;
     }
 
-    public dispatchIx <R = S> (action: IxAction<S, R>): Observable<R> {
+    public dispatchIx <R = S> (action: IxAction<S, R>): void {
 
-        const stateView = view(action.lens);
-
-        const obs = this.state$.first()
-            .map(s => [
-                s, of(s)
-                    .map<any, any>(stateView)
-                    .chain(action.update)
+        this.syncSubject = this.syncSubject || new Subject<IxAction<S, R>>();
+        this.syncSubscription = this.syncSubscription || this.syncSubject
+            .withLatestFrom(
+                this.state$,
+                (a, s) => [a, s, of(s)
+                    .map<any, any>(view(a.lens))
+                    .chain(a.update)
                     .reduce((__, o) => o),
-            ])
-            .concatMap(([s, o]) =>
-                action.commit(o)
-                    .catch(() => Observable.of(of(s)
-                        .map<any, any>(stateView)
-                        .chain(action.rollback || (() => of(s)))
-                        .reduce((__, oo) => oo)),
-                    )
-                    .startWith(o),
+                ],
             )
-            .subscribeOn(async) // To allow sub-tick cleanup after a dispatchIx.
-            .share();
+            .concatMap(([a, s, o]) => a.commit(s, o).startWith(ixAction(a.lens)(a.type, () => of(o))))
+            // .subscribeOn(async)
+            .subscribe((a: any) => super.dispatch(a));
 
-        obs.subscribe(s => super.dispatch(ixAction(action.lens)(() => of(s))));
-
-        return obs;
+        this.syncSubject.next(action);
     }
 }
 
 export const IX_STORE_PROVIDERS: Provider[] = [IxStore];
-

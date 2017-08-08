@@ -43,14 +43,14 @@ export class AppComponent {
   }
 
   public increment () {
-    this.store.dispatchIx(ca(bf(INCREMENT)));
+    this.store.dispatchIx(ca("INCREMENT", bf(INCREMENT)));
   }
 
   public decrement () {
-    this.store.dispatchIx(ca(bf(DECREMENT)));
+    this.store.dispatchIx(ca("DECREMENT", bf(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(ca(bf(RESET)));
+    this.store.dispatchIx(ca("RESET", bf(RESET)));
   }
 }
