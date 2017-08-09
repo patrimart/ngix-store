@@ -1,9 +1,9 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "license": "MIT",
   "author": "Patrick Martin",
-  "main": "./bundle/ngixstore.umd.js",
+  "main": "./index.js",
   "types": "./index.d.ts",
   "peerDependencies": {
     "@angular/core": "^4.0.0",

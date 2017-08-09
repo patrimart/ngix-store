@@ -5,7 +5,7 @@ module.exports = {
     output: {
         path: __dirname + "/package/bundle",
         filename: "ngixstore.umd.js",
-        library: "ngix",
+        library: "@ngix/store",
         libraryTarget: "umd"
     },
     externals: [
