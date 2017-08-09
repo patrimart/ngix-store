@@ -47,10 +47,10 @@ export class AppComponent {
   }
 
   public decrement () {
-    this.store.dispatchIx(ca("DECREMENT", bf(DECREMENT)));
+    this.store.dispatchAsyncIx(ca("DECREMENT", bf(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(ca("RESET", bf(RESET)));
+    this.store.dispatchAsyncIx(ca("RESET", bf(RESET)));
   }
 }
