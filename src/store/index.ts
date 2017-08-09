@@ -6,4 +6,3 @@ export { ix, lens };
 export * from "./ixstore";
 export * from "./ixstoremodule";
 export * from "./models";
-export * from "./ixreducer";

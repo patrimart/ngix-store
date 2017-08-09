@@ -15,7 +15,7 @@ import {
     StoreConfig,
 } from "@ngrx/store/src/store_module";
 
-import { IX_STORE_PROVIDERS } from "../store/ixstore";
+import { IX_STORE_PROVIDERS } from "./ixstore";
 import { ixMetaReducer } from "./ixreducer";
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "author": "Patrick Martin",
   "scripts": {
@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json && cp ./package.dist.json ./package/package.json && cp ./README.md ./package"
+    "package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json && cp ./package.dist.json ./package/package.json && cp ./README.md ./package",
+    "webpack": "./node_modules/.bin/webpack --config=./webpack.umd.js",
+    "dist": "npm run package && npm run webpack"
   },
   "private": true,
   "dependencies": {},
@@ -53,6 +55,7 @@
     "ts-node": "~3.0.4",
     "tslint": "^5.3.2",
     "typescript": "^2.4.2",
+    "webpack": "^3.5.1",
     "zone.js": "^0.8.4"
   }
 }

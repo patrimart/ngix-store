@@ -42,7 +42,7 @@ import { AppComponent } from "./app.component";
   declarations: [ AppComponent ],
   imports: [
     BrowserModule,
-    IxStoreModule.forRoot(),
+    IxStoreModule.forRoot({ counter: 0 }),
   ],
   bootstrap: [ AppComponent ]
 })
@@ -52,7 +52,7 @@ export class AppModule {}
 Finally, inject the `IxStore` service into your components and services. Use `store.view(Lens)` to _focus_ on slice(s) of state. Here you see another fundemental difference between `@ngrx/store` and `@ngix/store`: instead of your logic being off in a reducer where you send potentially stale state, you compose functions and dispatch them to be lazily evaluated in the IxReducer with the latest state.
 
 ```ts
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
 import { IterableX } from "@ngix/ix/iterable";
@@ -77,6 +77,7 @@ export const RESET = ix.lift<number>(map, () => 0);
 
     <button (click)="reset()">Reset Counter</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
 
@@ -88,15 +89,15 @@ export class AppComponent {
   }
 
   public increment () {
-    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(INCREMENT)));
+    this.store.dispatchIx(ixAction(this.counterLens)("INCREMENT", ix.bindFrom(INCREMENT)));
   }
 
   public decrement () {
-    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(DECREMENT)));
+    this.store.dispatchIx(ixAction(this.counterLens)("DECREMENT", ix.bindFrom(DECREMENT)));
   }
 
   public reset () {
-    this.store.dispatchIx(ixAction(this.counterLens)(ix.bindFrom(RESET)));
+    this.store.dispatchIx(ixAction(this.counterLens)("RESET", ix.bindFrom(RESET)));
   }
 }
 ```

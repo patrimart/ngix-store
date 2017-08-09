@@ -1,5 +1,5 @@
 
-import { Component, ChangeDetectionStrategy }  from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
 import { IterableX } from "@ngix/ix/iterable";
@@ -29,7 +29,6 @@ export const RESET = lift<number>(map, () => 0);
     <div>Current Count: {{ counter | async | json }}</div>
     <button (click)="increment()">+</button>
     <button (click)="decrement()">-</button>
-
     <button (click)="reset()">Reset</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
