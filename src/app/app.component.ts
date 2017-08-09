@@ -43,7 +43,7 @@ export class AppComponent {
   }
 
   public increment () {
-    this.store.dispatchIx(ca("INCREMENT", bf(INCREMENT)));
+    this.store.dispatchAsyncIx(ca("INCREMENT", bf(INCREMENT)));
   }
 
   public decrement () {

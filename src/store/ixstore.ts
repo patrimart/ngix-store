@@ -8,10 +8,10 @@ import { Subscription }     from "rxjs/Subscription";
 import { async }      from "rxjs/scheduler/async";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
-import "rxjs/add/operator/concatMap";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
+import "rxjs/add/operator/mergeMap";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/operator/subscribeOn";
@@ -25,6 +25,7 @@ import "@ngix/ix/add/iterable-operators/reduce";
 
 import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "@ngrx/store";
 
+import { IxDispatcher }               from "./ixdispatcher";
 import { view, Lens, ERR_VAL }        from "./lens";
 import { ixAction, IxAction, ACTION } from "./models";
 
@@ -32,13 +33,11 @@ import { ixAction, IxAction, ACTION } from "./models";
 @Injectable()
 export class IxStore<S> extends Store<S> {
 
-    private syncSubject: Subject<IxAction<S, any>>;
-    private syncSubscription: Subscription;
-
     constructor(
         @Inject(StateObservable) private state$: StateObservable,
         @Inject(ActionsSubject)  private ao: ActionsSubject,
         @Inject(ReducerManager)  private rm: ReducerManager,
+        @Inject(IxDispatcher)    private dispatcher: IxDispatcher,
     ) {
         super(state$, ao, rm);
     }
@@ -56,29 +55,18 @@ export class IxStore<S> extends Store<S> {
     }
 
     public lift <R> (operator: Operator<S, R>): IxStore<R> {
-        const store = new IxStore<R>(this, this.ao, this.rm);
+        const store = new IxStore<R>(this, this.ao, this.rm, this.dispatcher);
         store.operator = operator;
         return store;
     }
 
     public dispatchIx <R = S> (action: IxAction<S, R>): void {
+        this.dispatcher.dispatchIx(action);
+    }
 
-        this.syncSubject = this.syncSubject || new Subject<IxAction<S, R>>();
-        this.syncSubscription = this.syncSubscription || this.syncSubject
-            .withLatestFrom(
-                this.state$,
-                (a, s) => [a, s, of(s)
-                    .map<any, any>(view(a.lens))
-                    .chain(a.update)
-                    .reduce((__, o) => o),
-                ],
-            )
-            .concatMap(([a, s, o]) => a.commit(s, o).startWith(ixAction(a.lens)(a.type, () => of(o))))
-            // .subscribeOn(async)
-            .subscribe((a: any) => super.dispatch(a));
-
-        this.syncSubject.next(action);
+    public dispatchAsyncIx <R = S> (action: IxAction<S, R>): void {
+        this.dispatcher.dispatchAsyncIx(action);
     }
 }
 
-export const IX_STORE_PROVIDERS: Provider[] = [IxStore];
+export const IX_STORE_PROVIDERS: Provider[] = [IxStore, IxDispatcher];
