@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "license": "MIT",
   "author": "Patrick Martin",
   "main": "./bundle/ngixstore.umd.js",
@@ -10,7 +10,7 @@
   "peerDependencies": {
     "@angular/core": "^4.0.0",
     "@ngrx/store": "^4.0.0",
-    "@ngix/ix": "2.0.0-alpha.0",
+    "@ngix/ix": "2.0.0-alpha.1",
     "rxjs": "^5.1.0"
   },
   "private": false,
