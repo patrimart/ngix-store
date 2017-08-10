@@ -16,16 +16,3 @@ export function bindOf <S, R = S> (
         return [fn, ...fns].reduce((s, f) => s.chain(ss => f(ss)), of(...args));
     }
 }
-
-
-// import "ix/add/iterable-operators/map";
-// import "ix/add/iterable-operators/chain";
-// import "ix/add/iterable-operators/foreach";
-// import { map } from "ix/iterable/map";
-
-// const cMap = c<number>(map, (i: any) => i + i);
-// const comp = [cMap, cMap, cMap];
-// const bound = bindOf(...comp);
-
-// bound(1, 2, 3, 4).forEach(i => console.log(i));
-

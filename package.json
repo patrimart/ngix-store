@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "license": "MIT",
   "author": "Patrick Martin",
   "scripts": {
@@ -11,8 +11,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json && cp ./package.dist.json ./package/package.json && cp ./README.md ./package",
-    "webpack": "./node_modules/.bin/webpack --config=./webpack.umd.js",
-    "dist": "npm run package && npm run webpack"
+    "rollup": "./node_modules/.bin/rollup -c rollup.es5.js && ./node_modules/.bin/rollup -c rollup.umd.js",
+    "dist": "npm run package && npm run rollup"
   },
   "private": true,
   "dependencies": {},
@@ -51,6 +51,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
+    "rollup": "^0.45.2",
     "rxjs": "^5.1.0",
     "ts-node": "~3.0.4",
     "tslint": "^5.3.2",

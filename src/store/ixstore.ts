@@ -1,27 +1,9 @@
 
 import { Injectable, Inject, Provider } from "@angular/core";
 
-import { Observable } from "rxjs/Observable";
-import { Operator }   from "rxjs/Operator";
-import { Subject }     from "rxjs/Subject";
-import { Subscription }     from "rxjs/Subscription";
-import { async }      from "rxjs/scheduler/async";
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/catch";
+import { Operator } from "rxjs/Operator";
 import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/operator/first";
 import "rxjs/add/operator/map";
-import "rxjs/add/operator/mergeMap";
-import "rxjs/add/operator/share";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/operator/subscribeOn";
-import "rxjs/add/operator/withLatestFrom";
-
-import { IterableX } from "@ngix/ix/iterable";
-import { of }        from "@ngix/ix/iterable/of";
-import "@ngix/ix/add/iterable-operators/chain";
-import "@ngix/ix/add/iterable-operators/map";
-import "@ngix/ix/add/iterable-operators/reduce";
 
 import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "@ngrx/store";
 

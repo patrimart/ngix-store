@@ -4,8 +4,9 @@ import { Injectable, Inject } from "@angular/core";
 import { Observable }   from "rxjs/Observable";
 import { Subject }      from "rxjs/Subject";
 import { Subscription } from "rxjs/Subscription";
-import { async }        from "rxjs/scheduler/async";
+// import { async }        from "rxjs/scheduler/async";
 import "rxjs/add/observable/of";
+import "rxjs/add/observable/empty";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/concatMap";
 import "rxjs/add/operator/debounceTime";
@@ -16,7 +17,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/mergeMap";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/startWith";
-import "rxjs/add/operator/subscribeOn";
+// import "rxjs/add/operator/subscribeOn";
 import "rxjs/add/operator/throttleTime";
 import "rxjs/add/operator/toPromise";
 import "rxjs/add/operator/withLatestFrom";
@@ -29,11 +30,11 @@ import "@ngix/ix/add/iterable-operators/reduce";
 
 import { ActionsSubject, StateObservable } from "@ngrx/store";
 
-import { view, Lens, ERR_VAL }        from "./lens";
+import { view, Lens, ERR_VAL } from "./lens";
 import { ixAction, IxAction } from "./models";
 
 
-const LENS_DELIMITER = "~*~";
+const LENS_DELIMITER = `\\\\\\`;
 
 
 @Injectable()
@@ -52,14 +53,21 @@ export class IxDispatcher {
         this.asyncSubscription$ = this.asyncSubject$
             .withLatestFrom(
                 this.state$,
-                (a, s) => [a, s, of(s)
+                (a: IxAction<any, any>, s: any) => [a, s, of(s)
                     .map<any, any>(view(a.lens))
                     .chain(a.update)
                     .reduce((__, o) => o),
                 ],
             )
-            .mergeMap(([a, s, o]) => a.commit(s, o).startWith(ixAction(a.lens)(a.type, () => of(o))))
-            .subscribeOn(async)
+            .mergeMap(([a, s, o]) => (a as IxAction<any, any>)
+                .commit(s, o)
+                .catch(err => {
+                    console.log("dispatchAsyncIx error", a, err);
+                    return Observable.empty();
+                })
+                .startWith(ixAction(a.lens)(a.type, () => of(o))),
+            )
+            // .subscribeOn(async)
             .subscribe((a: any) => this.actions$.next(a));
 
         // Cleans up the "SyncTable".
@@ -71,7 +79,7 @@ export class IxDispatcher {
                 for (let i = 0, len = keys.length; i < len; i++) {
                     const key = keys[i];
                     const lens = key.split(LENS_DELIMITER) as Lens;
-                    if (view(lens)({}) === ERR_VAL) {
+                    if (view(lens)(state) === ERR_VAL) {
                         (this.syncTable[key])();
                         delete this.syncTable[key];
                     }
@@ -106,7 +114,14 @@ export class IxDispatcher {
                         .reduce((__, o) => o),
                     ],
                 )
-                .concatMap(([a, s, o]) => a.commit(s, o).startWith(ixAction(a.lens)(a.type, () => of(o))))
+                .concatMap(([a, s, o]) => (a as IxAction<any, any>)
+                    .commit(s, o)
+                    .catch(err => {
+                        console.log("dispatchIx error", a, err);
+                        return Observable.empty();
+                    })
+                    .startWith(ixAction(a.lens)(a.type, () => of(o))),
+                )
                 // .subscribeOn(async)
                 .subscribe((a: any) => this.actions$.next(a));
 

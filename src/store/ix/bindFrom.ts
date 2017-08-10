@@ -17,20 +17,3 @@ export function bindFrom <S, R> (
         return [fn, ...fns].reduce((s, f) => s.chain(ss => f(ss)), from(source));
     }
 }
-
-
-// import "ix/add/iterable-operators/map";
-// import "ix/add/iterable-operators/chain";
-// import "ix/add/iterable-operators/foreach";
-// import { map } from "@ngix/ix/iterable/map";
-
-// import { curry } from "./curry";
-
-// const cMap = curry<number>(map, i => i + i);
-// const comp = [cMap, cMap, cMap];
-// const bound = bindFrom(...comp);
-
-// from([1, 2, 3, 4])
-//     .map(i => i + i)
-//     .chain(bound)
-//     .forEach(i => console.log(i));
