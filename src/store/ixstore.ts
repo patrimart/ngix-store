@@ -8,7 +8,7 @@ import "rxjs/add/operator/map";
 import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "@ngrx/store";
 
 import { IxDispatcher }               from "./ixdispatcher";
-import { view, Lens, ERR_VAL }        from "./lens";
+import { view, Lens }                 from "./lens";
 import { ixAction, IxAction, ACTION } from "./models";
 
 
@@ -24,16 +24,12 @@ export class IxStore<S> extends Store<S> {
         super(state$, ao, rm);
     }
 
-    public view <R> (lens: Lens): IxStore<R> {
+    public view <R> (lens: Lens): IxStore<R | undefined> {
 
-        const viewLens = view<S, R>(lens);
+        const viewLens = view<S, R | undefined>(lens);
         return this.state$
-            .map<S, R>(s => {
-                const st = viewLens(s);
-                if (st === ERR_VAL) { throw new Error(`The lens (${lens.join(".")}) could not resolve.`); }
-                return st as R;
-            })
-            .distinctUntilChanged() as IxStore<R>;
+            .map<S, R | undefined>(viewLens)
+            .distinctUntilChanged() as IxStore<R | undefined>;
     }
 
     public lift <R> (operator: Operator<S, R>): IxStore<R> {

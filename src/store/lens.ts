@@ -19,19 +19,18 @@ export function lens (...args: any[]): Lens {
 }
 
 
-export const ERR_VAL = Symbol();
-
 /**
  * Builds a curried function to get the value of the lens focus.
+ * Returns `undefined` if the lens does not resolve.
  */
-export function view <S, R = S> (lns: Lens): (state: S) => R | symbol {
+export function view <S, R = S> (lns: Lens): (state: S) => R | undefined {
 
-    return function (state: S): R | symbol {
+    return function (state: S): R | undefined {
         let accState: any = state;
         for (let i = 0, len = lns.length; i < len; i++) {
             const prop = lns[i];
             if (prop in accState === false) {
-                return ERR_VAL;
+                return undefined;
             }
             accState = accState[prop];
         }
@@ -52,7 +51,7 @@ export function set <S> (lns: Lens): <R>(val: R) => (state: S) => S {
 /**
  * Builds a curried function to map a value at the lens focus.
  * New objects are created and frozen as the lens walks the object tree.
- * If the path to the focus does not exist, that same state reference will be returned.
+ * If the path to the focus does not exist, a new object/array will be created.
  */
 export function over <S> (lns: Lens) {
 
@@ -63,7 +62,9 @@ export function over <S> (lns: Lens) {
 
         for (let i = 0, len = lns.length; i < len; i++) {
             const k = lns[i];
-            if (k in ms === false) { return state; }
+            if (k in ms === false) {
+                ms[k] = typeof lns[i + 1] === "number" ? [] : {};
+            }
             ms = ms[k] = Object.freeze(len - i - 1 ? Array.isArray(ms[k]) ? ms[k].slice(0) : { ...ms[k] } : fn(ms[k]))
         }
 

@@ -4,7 +4,6 @@ import { Injectable, Inject } from "@angular/core";
 import { Observable }   from "rxjs/Observable";
 import { Subject }      from "rxjs/Subject";
 import { Subscription } from "rxjs/Subscription";
-// import { async }        from "rxjs/scheduler/async";
 import "rxjs/add/observable/of";
 import "rxjs/add/observable/empty";
 import "rxjs/add/operator/catch";
@@ -17,7 +16,6 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/mergeMap";
 import "rxjs/add/operator/share";
 import "rxjs/add/operator/startWith";
-// import "rxjs/add/operator/subscribeOn";
 import "rxjs/add/operator/throttleTime";
 import "rxjs/add/operator/toPromise";
 import "rxjs/add/operator/withLatestFrom";
@@ -30,7 +28,7 @@ import "@ngix/ix/add/iterable-operators/reduce";
 
 import { ActionsSubject, StateObservable } from "@ngrx/store";
 
-import { view, Lens, ERR_VAL } from "./lens";
+import { view, Lens } from "./lens";
 import { ixAction, IxAction } from "./models";
 
 
@@ -67,7 +65,6 @@ export class IxDispatcher {
                 })
                 .startWith(ixAction(a.lens)(a.type, () => of(o))),
             )
-            // .subscribeOn(async)
             .subscribe((a: any) => this.actions$.next(a));
 
         // Cleans up the "SyncTable".
@@ -79,7 +76,7 @@ export class IxDispatcher {
                 for (let i = 0, len = keys.length; i < len; i++) {
                     const key = keys[i];
                     const lens = key.split(LENS_DELIMITER) as Lens;
-                    if (view(lens)(state) === ERR_VAL) {
+                    if (view(lens)(state) === undefined) {
                         (this.syncTable[key])();
                         delete this.syncTable[key];
                     }
@@ -122,7 +119,6 @@ export class IxDispatcher {
                     })
                     .startWith(ixAction(a.lens)(a.type, () => of(o))),
                 )
-                // .subscribeOn(async)
                 .subscribe((a: any) => this.actions$.next(a));
 
             this.syncTable[key] = function (action?: IxAction<S, R>): void {
