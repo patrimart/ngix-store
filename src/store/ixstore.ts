@@ -38,11 +38,11 @@ export class IxStore<S> extends Store<S> {
         return store;
     }
 
-    public dispatchIx <R = S> (...action: IxAction<S, R>[]): void {
+    public dispatchIx <R> (...action: IxAction<R>[]): void {
         action.forEach(a => this.dispatcher.dispatchIx(a));
     }
 
-    public dispatchAsyncIx <R = S> (...action: IxAction<S, R>[]): void {
+    public dispatchAsyncIx <R> (...action: IxAction<R>[]): void {
         action.forEach(a => this.dispatcher.dispatchAsyncIx(a));
     }
 }

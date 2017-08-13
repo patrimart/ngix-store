@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   public decrement () {
-    this.store.dispatchAsyncIx(ca("DECREMENT", bf(DECREMENT)));
+    this.store.dispatchIx(ca("DECREMENT", bf(DECREMENT)));
   }
 
   public reset () {

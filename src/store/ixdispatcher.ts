@@ -38,26 +38,26 @@ const LENS_DELIMITER = `\\\\\\`;
 @Injectable()
 export class IxDispatcher {
 
-    private syncTable: { [lens: string]: (action?: IxAction<any, any>) => void } = {};
+    private syncTable: { [lens: string]: (action?: IxAction<any>) => void } = {};
 
-    private asyncSubject$: Subject<IxAction<any, any>>;
+    private asyncSubject$: Subject<IxAction<any>>;
     private asyncSubscription$: Subscription;
 
     constructor(
         @Inject(StateObservable) private state$: StateObservable,
         @Inject(ActionsSubject) private actions$: ActionsSubject,
     ) {
-        this.asyncSubject$ = new Subject<IxAction<any, any>>();
+        this.asyncSubject$ = new Subject<IxAction<any>>();
         this.asyncSubscription$ = this.asyncSubject$
             .withLatestFrom(
                 this.state$,
-                (a: IxAction<any, any>, s: any) => [a, view(a.lens)(s), of(s)
+                (a: IxAction<any>, s: any) => [a, view(a.lens)(s), of(s)
                     .map<any, any>(view(a.lens))
                     .chain(a.update)
                     .reduce((__, o) => o),
                 ],
             )
-            .mergeMap(([a, s, o]) => (a as IxAction<any, any>)
+            .mergeMap(([a, s, o]) => (a as IxAction<any>)
                 .commit(s, o)
                 .catch(err => {
                     console.log("dispatchAsyncIx error", a, err);
@@ -84,44 +84,44 @@ export class IxDispatcher {
             });
     }
 
-    public dispatchIx <S, R = S> (action: IxAction<S, R>): void {
+    public dispatchIx <S> (action: IxAction<S>): void {
         if (action !== undefined) {
             this.getSyncDispatcher(action.lens)(action);
         }
     }
 
-    public dispatchAsyncIx <S, R = S> (action: IxAction<S, R>): void {
+    public dispatchAsyncIx <S> (action: IxAction<S>): void {
         if (action !== undefined) {
             this.asyncSubject$.next(action);
         }
     }
 
-    private getSyncDispatcher <S, R> (lens: Lens): (action?: IxAction<S, R>) => void {
+    private getSyncDispatcher <S, R> (lens: Lens): (action?: IxAction<R>) => void {
 
         const key = lens.join(LENS_DELIMITER);
         if (key in this.syncTable === false) {
 
-            const subject = new Subject<IxAction<any, any>>();
+            const subject = new Subject<IxAction<R>>();
             const subscription = subject
                 .withLatestFrom(
                     this.state$,
-                    (a, s) => [a, view(a.lens)(s), of(s)
-                        .map<any, any>(view(a.lens))
+                    (a, s: S) => [a, view<S, R>(a.lens)(s), of(s)
+                        .map(view<S, R>(a.lens))
                         .chain(a.update)
                         .reduce((__, o) => o),
-                    ],
+                    ] as [IxAction<R>, R, R],
                 )
-                .concatMap(([a, s, o]) => (a as IxAction<any, any>)
+                .concatMap(([a, s, o]) => a
                     .commit(s, o)
                     .catch(err => {
                         console.log("dispatchIx error", a, err);
                         return Observable.empty();
                     })
-                    .startWith(ixAction(a.lens)(a.type, () => of(o))),
+                    .startWith(ixAction<R>(a.lens)(a.type, () => of(o))),
                 )
                 .subscribe((a: any) => this.actions$.next(a));
 
-            this.syncTable[key] = function (action?: IxAction<S, R>): void {
+            this.syncTable[key] = function (action?: IxAction<R>): void {
 
                 if (action === undefined) {
                     subscription.unsubscribe();

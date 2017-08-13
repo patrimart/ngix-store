@@ -15,23 +15,23 @@ export const ACTION = "[@ngix/store/action]";
 /**
  * IxAction interface for ngix.
  */
-export interface IxAction <S, R> extends Action {
+export interface IxAction <S> extends Action {
     readonly type: string;
     readonly lens: Lens;
-    readonly update: (s: Iterable<S>) => IterableX<R>;
-    readonly commit: (s: S, o: R) => Observable<IxAction<S, R>>;
+    readonly update: (s: Iterable<S>) => IterableX<S>;
+    readonly commit: (s: S, o: S) => Observable<IxAction<S>>;
 }
 
 /**
  * IxAction factory function.
  */
-export function ixAction (lens: Lens) {
+export function ixAction <S> (lens: Lens) {
 
-    return function <S, R> (
+    return function (
         type = lens.join("/"),
-        update: (state: Iterable<any>) => IterableX<R>,
-        commit = (s: S, o: R) => Observable.empty<IxAction<S, R>>(),
-    ): IxAction <S, R> {
+        update: (state: Iterable<S>) => IterableX<S>,
+        commit = (s: S, o: S) => Observable.empty<IxAction<S>>(),
+    ): IxAction <S> {
         return { type: `${ACTION} ${type}`, lens, update, commit };
     }
 }
