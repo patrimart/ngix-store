@@ -35,7 +35,7 @@ export const RESET = lift<number>(map, () => 0);
 })
 export class AppComponent {
 
-  public counter: Observable<number|undefined>;
+  public counter: Observable<number>;
 
   public constructor(private store: IxStore<AppState>) {
     this.counter = this.store.view(COUNTER_LENS);

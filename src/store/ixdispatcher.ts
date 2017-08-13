@@ -51,7 +51,7 @@ export class IxDispatcher {
         this.asyncSubscription$ = this.asyncSubject$
             .withLatestFrom(
                 this.state$,
-                (a: IxAction<any, any>, s: any) => [a, s, of(s)
+                (a: IxAction<any, any>, s: any) => [a, view(a.lens)(s), of(s)
                     .map<any, any>(view(a.lens))
                     .chain(a.update)
                     .reduce((__, o) => o),
@@ -105,7 +105,7 @@ export class IxDispatcher {
             const subscription = subject
                 .withLatestFrom(
                     this.state$,
-                    (a, s) => [a, s, of(s)
+                    (a, s) => [a, view(a.lens)(s), of(s)
                         .map<any, any>(view(a.lens))
                         .chain(a.update)
                         .reduce((__, o) => o),

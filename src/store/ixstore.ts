@@ -24,12 +24,12 @@ export class IxStore<S> extends Store<S> {
         super(state$, ao, rm);
     }
 
-    public view <R> (lens: Lens): IxStore<R | undefined> {
+    public view <R> (lens: Lens): IxStore<R> {
 
-        const viewLens = view<S, R | undefined>(lens);
+        const viewLens = view<S, R>(lens);
         return this.state$
-            .map<S, R | undefined>(viewLens)
-            .distinctUntilChanged() as IxStore<R | undefined>;
+            .map<S, R>(viewLens)
+            .distinctUntilChanged() as IxStore<R>;
     }
 
     public lift <R> (operator: Operator<S, R>): IxStore<R> {
@@ -38,12 +38,12 @@ export class IxStore<S> extends Store<S> {
         return store;
     }
 
-    public dispatchIx <R = S> (action: IxAction<S, R>): void {
-        this.dispatcher.dispatchIx(action);
+    public dispatchIx <R = S> (...action: IxAction<S, R>[]): void {
+        action.forEach(a => this.dispatcher.dispatchIx(a));
     }
 
-    public dispatchAsyncIx <R = S> (action: IxAction<S, R>): void {
-        this.dispatcher.dispatchAsyncIx(action);
+    public dispatchAsyncIx <R = S> (...action: IxAction<S, R>[]): void {
+        action.forEach(a => this.dispatcher.dispatchAsyncIx(a));
     }
 }
 

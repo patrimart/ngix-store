@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-alpha.12",
+  "version": "1.0.0-beta.2",
   "license": "MIT",
   "author": "Patrick Martin",
   "scripts": {

@@ -23,14 +23,14 @@ export function lens (...args: any[]): Lens {
  * Builds a curried function to get the value of the lens focus.
  * Returns `undefined` if the lens does not resolve.
  */
-export function view <S, R = S> (lns: Lens): (state: S) => R | undefined {
+export function view <S, R = S> (lns: Lens): (state: S) => R {
 
-    return function (state: S): R | undefined {
+    return function (state: S): R {
         let accState: any = state;
         for (let i = 0, len = lns.length; i < len; i++) {
             const prop = lns[i];
             if (prop in accState === false) {
-                return undefined;
+                return undefined as any;
             }
             accState = accState[prop];
         }
