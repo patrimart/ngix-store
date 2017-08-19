@@ -2,11 +2,15 @@
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/empty";
 
-import { IterableX } from "@ngix/ix/iterable";
-import { of }        from "@ngix/ix/iterable/of";
+import * as Ix from "ix";
+import IterableX = Ix.Iterable;
+import of = Ix.Iterable.of;
+// import { IterableX } from "ix/iterable";
+// import { of }        from "ix/iterable/of";
 
 import { Action } from "@ngrx/store";
 
+import { IxFunction } from "./ix";
 import { Lens } from "./lens";
 
 export const ACTION = "[@ngix/store/action]";
@@ -18,7 +22,7 @@ export const ACTION = "[@ngix/store/action]";
 export interface IxAction <S> extends Action {
     readonly type: string;
     readonly lens: Lens;
-    readonly update: (s: Iterable<S>) => IterableX<S>;
+    readonly update: IxFunction<S>;
     readonly commit: (s: S, o: S) => Observable<IxAction<S>>;
 }
 
@@ -29,7 +33,7 @@ export function ixAction <S> (lens: Lens) {
 
     return function (
         type = lens.join("/"),
-        update: (state: Iterable<S>) => IterableX<S>,
+        update: IxFunction<S>,
         commit = (s: S, o: S) => Observable.empty<IxAction<S>>(),
     ): IxAction <S> {
         return { type: `${ACTION} ${type}`, lens, update, commit };
