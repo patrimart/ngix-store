@@ -108,15 +108,24 @@ export class AppComponent {
 ```
 
 
-### More Docs and Examples Coming Soon
+## Todo List Demo Application
 
-Stay tuned...
+Here is the [Github repo](https://github.com/patrimart/ngix-demo-todo) with the Todo List demo.
+
+It is an Angular CLI app. After `npm install`, start it with `ng serve`. This assumes that you have
+`@angular/cli` installed globally.
+
+
+### Documentation
+
+See the Wiki for detailed documentation.
 
 
 ### Todos
 
 - Add unit tests with 90+% coverage.
 - Test `IxStoreModule.forFeature()` with lazy loading.
+- Describe more `@ngix` idiomatic patterns.
 
 
 ---
