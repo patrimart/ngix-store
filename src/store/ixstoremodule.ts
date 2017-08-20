@@ -46,13 +46,11 @@ export class IxStoreModule {
 
     /**
      * @ngix/store alternative to @ngrx/store StoreModule.forFeature.
-     * @param featureName
      * @param initIxState - The initial state for the IxStore.
      * @param [reducers]
      * @param [config]
      */
     static forFeature <S extends { [key: string]: any }, T, V extends Action = Action> (
-        featureName: string,
         initIxState: S,
         reducer?: ActionReducerMap<T, V> | ActionReducer<T, V>,
         config?: StoreConfig<T, V>,
@@ -63,7 +61,7 @@ export class IxStoreModule {
             (p: any, k: string) => ({ ...p, [k]: (s = initIxState[k]) => s }),
             reducer || {},
         );
-        const module = StoreModule.forFeature(featureName, ixReducers, Object.assign({}, config, { metaReducers }));
+        const module = StoreModule.forFeature("[@ngix/store/feature]", ixReducers, Object.assign({}, config, { metaReducers }));
         module.providers = (module.providers || []).concat(IX_STORE_PROVIDERS);
         return module;
     }
