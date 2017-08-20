@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Patrick Martin",
   "main": "./bundle/ngixstore.umd.js",

@@ -10,11 +10,7 @@ export type Lens = Array<string | number>;
 export function lens (...props: Lens): Lens;
 export function lens (...lenses: Lens[]): Lens;
 export function lens (...args: any[]): Lens {
-
-    if (typeof args[0] !== "object") {
-        return args.slice(0);
-    }
-    return args.reduce((p, c) => p.concat(c || []), []);
+    return args.reduce((p, c) => p.concat(c), []);
 }
 
 /**
