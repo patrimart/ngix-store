@@ -71,3 +71,27 @@ export function over <S> (lns: Lens) {
         return Object.freeze(origState);
     }
 }
+
+
+export function del <S> (lns: Lens) {
+
+    return (state: S): S => {
+
+        const origState: S = Array.isArray(state) ? state.slice(0) : { ...state as any };
+        let ms: any = origState;
+
+        for (let i = 0, len = lns.length; i < len; i++) {
+            const k = lns[i];
+            if (k in ms === false) {
+                ms[k] = typeof lns[i + 1] === "number" ? [] : {};
+            }
+            if (len - i - 1) {
+                ms = ms[k] = Object.freeze(Array.isArray(ms[k]) ? ms[k].slice(0) : { ...ms[k] });
+            } else {
+                delete ms[k];
+            }
+        }
+
+        return Object.freeze(origState);
+    }
+}
