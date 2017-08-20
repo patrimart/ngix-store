@@ -1,7 +1,4 @@
 
-// import * as Ix from "ix";
-// import IterableX = Ix.Iterable;
-// import from = Ix.Iterable.from;
 import { IterableX } from "ix/iterable";
 import { of } from "ix/iterable/of";
 import { from } from "ix/iterable/from";

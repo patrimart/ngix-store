@@ -1,9 +1,7 @@
 
 import { Action, ActionReducer } from "@ngrx/store";
 
-import * as Ix from "ix";
-import of = Ix.Iterable.of;
-// import { of } from "ix/iterable/of";
+import { of } from "ix/iterable/of";
 
 import { set, view } from "./lens";
 

@@ -2,9 +2,8 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
-import * as Ix from "ix";
-import IterableX = Ix.Iterable;
-import map = Ix.Iterable.map;
+import { IterableX } from "ix/iterable";
+import { map } from "ix/iterable/map";
 
 import { IxStore } from "../store/ixstore";
 import { ixAction, IxAction } from "../store/models";
@@ -17,11 +16,11 @@ export interface AppState {
 }
 
 
-export const COUNTER_LENS = lens("counter");
-export const ca = ixAction(COUNTER_LENS);
-export const INCREMENT = lift<number>(map, i => i + 1);
-export const DECREMENT = lift<number>(map, i => i - 1);
-export const RESET = lift<number>(map, () => 0);
+export const cl = lens("counter");
+export const ca = ixAction(cl);
+export const INCREMENT = lift<number>(map)(i => i + 1);
+export const DECREMENT = lift<number>(map)(i => i - 1);
+export const RESET = lift<number>(map)(() => 0);
 
 
 @Component({
@@ -39,18 +38,18 @@ export class AppComponent {
   public counter: Observable<number>;
 
   public constructor(private store: IxStore<AppState>) {
-    this.counter = this.store.view(COUNTER_LENS);
+    this.counter = this.store.view(cl);
   }
 
   public increment () {
-    this.store.dispatchAsyncIx(ca("INCREMENT", bf(INCREMENT)));
+    this.store.dispatchIx(ca("INCREMENT", INCREMENT));
   }
 
   public decrement () {
-    this.store.dispatchIx(ca("DECREMENT", bf(DECREMENT)));
+    this.store.dispatchIx(ca("DECREMENT", DECREMENT));
   }
 
   public reset () {
-    this.store.dispatchAsyncIx(ca("RESET", bf(RESET)));
+    this.store.dispatchIx(ca("RESET", RESET));
   }
 }

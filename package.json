@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "license": "MIT",
   "author": "Patrick Martin",
   "scripts": {
@@ -10,9 +10,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json && cp ./package.dist.json ./package/package.json && cp ./README.md ./package",
-    "rollup": "./node_modules/.bin/rollup -c rollup.es5.js && ./node_modules/.bin/rollup -c rollup.umd.js",
-    "dist": "npm run package && npm run rollup"
+    "_package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json",
+    "_copy": "cp ./package.dist.json ./package/package.json && cp ./README.md ./package",
+    "_move": "mv ./package/src/store/* ./package && rm -rf ./package/src && rm -rf ./package/IxJS",
+    "_rollup": "./node_modules/.bin/rollup -c rollup.es5.js && ./node_modules/.bin/rollup -c rollup.umd.js",
+    "dist": "npm run _package && npm run _copy && npm run _move && npm run _rollup"
   },
   "private": true,
   "dependencies": {},
@@ -42,7 +44,6 @@
     "codelyzer": "~3.0.1",
     "core-js": "^2.4.1",
     "install": "^0.10.1",
-    "ix": "^2.0.1",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",

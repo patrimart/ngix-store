@@ -11,19 +11,23 @@
     "experimentalDecorators": true,
     "strict": true,
     "skipLibCheck": true,
-    "target": "es5",
+    "removeComments": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2016",
+      "esnext",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ix/*": ["../IxJS/src/*"]
+    }
   },
   "include": [
     "./src/store/**/*"
   ],
   "angularCompilerOptions": {
-    "genDir": "./ngfactory"
+    "skipTemplateCodegen": true
   }
 }

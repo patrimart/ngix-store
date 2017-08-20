@@ -13,12 +13,15 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "include": [
-      "./src/**/*"
-    ],
     "lib": [
-      "es2016",
+      "esnext",
       "dom"
-    ]
-  }
+    ],
+    "paths": {
+      "ix/*": ["../IxJS/src/*"]
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ]
 }

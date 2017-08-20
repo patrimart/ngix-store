@@ -1,7 +1,5 @@
 
-import * as Ix from "ix";
-import IterableX = Ix.Iterable;
-// import { IterableX } from "ix/iterable";
+import { IterableX } from "ix/iterable";
 
 import { IxFunction } from "./interfaces";
 

@@ -20,14 +20,11 @@ import "rxjs/add/operator/throttleTime";
 import "rxjs/add/operator/toPromise";
 import "rxjs/add/operator/withLatestFrom";
 
-import * as Ix from "ix";
-import IterableX = Ix.Iterable;
-import of = Ix.Iterable.of;
-// import { IterableX } from "@ngix/ix/iterable";
-// import { of }        from "@ngix/ix/iterable/of";
-// import "@ngix/ix/add/iterable-operators/chain";
-// import "@ngix/ix/add/iterable-operators/map";
-// import "@ngix/ix/add/iterable-operators/reduce";
+import { IterableX } from "ix/iterable";
+import { of }        from "ix/iterable/of";
+import "ix/add/iterable-operators/chain";
+import "ix/add/iterable-operators/map";
+import "ix/add/iterable-operators/reduce";
 
 import { ActionsSubject, StateObservable } from "@ngrx/store";
 

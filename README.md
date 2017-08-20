@@ -20,7 +20,7 @@ Core tenents:
 
 Install @ngix/store from npm:
 
-`npm i @ngix/store @ngix/ix -S`
+`npm i -S @ngix/store ix`
 
 ### Setup
 
@@ -55,8 +55,8 @@ Finally, inject the `IxStore` service into your components and services. Use `st
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
-import { IterableX } from "@ngix/ix/iterable";
-import { map } from "@ngix/ix/iterable/map";
+import { IterableX } from "ix/iterable";
+import { map } from "ix/iterable/map";
 
 import { IxStore, ixAction, IxAction, lens, ix } from "@ngix/store";
 
@@ -64,9 +64,12 @@ export interface AppState {
   counter: number;
 }
 
-export const INCREMENT = ix.lift<number>(map, i => i + 1);
-export const DECREMENT = ix.lift<number>(map, i => i - 1);
-export const RESET = ix.lift<number>(map, () => 0);
+export const lmap = ix.lift<number>(map);
+export const INCREMENT = lmap(i => i + 1);
+export const DECREMENT = lmap(i => i - 1);
+export const RESET = lmap(() => 0);
+export const cl = lens.lens("counter");
+export const ca = ixAction(counterLens);
 
 @Component({
   selector: "app-root",
@@ -74,7 +77,6 @@ export const RESET = ix.lift<number>(map, () => 0);
     <button (click)="increment()">Increment</button>
     <div>Current Count: {{ counter | async }}</div>
     <button (click)="decrement()">Decrement</button>
-
     <button (click)="reset()">Reset Counter</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,22 +84,21 @@ export const RESET = ix.lift<number>(map, () => 0);
 export class AppComponent {
 
   public counter: Observable<number>;
-  public counterLens = lens.lens("counter");
 
   public constructor(private store: IxStore<AppState>) {
-    this.counter = this.store.view(this.counterLens);
+    this.counter = this.store.view(cl);
   }
 
   public increment () {
-    this.store.dispatchIx(ixAction(this.counterLens)("INCREMENT", ix.bindFrom(INCREMENT)));
+    this.store.dispatchIx(ca("INCREMENT", INCREMENT));
   }
 
   public decrement () {
-    this.store.dispatchIx(ixAction(this.counterLens)("DECREMENT", ix.bindFrom(DECREMENT)));
+    this.store.dispatchIx(ca("DECREMENT", DECREMENT));
   }
 
   public reset () {
-    this.store.dispatchIx(ixAction(this.counterLens)("RESET", ix.bindFrom(RESET)));
+    this.store.dispatchIx(ca("RESET", RESET));
   }
 }
 ```
