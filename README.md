@@ -26,7 +26,12 @@ there is a workaround in the Todo Demo Project that involves cloning the repo an
 to the `tsconfig.json` file.
 
 
-### Setup
+### Documentation
+
+See the Wiki for detailed documentation.
+
+
+### Example Usage
 
 This is the simple example from `@ngrx/store` reworked to use `@ngix/store`.
 
@@ -108,7 +113,7 @@ export class AppComponent {
 ```
 
 
-## Todo List Demo Application
+### Todo List Demo Application
 
 Here is the [Github repo](https://github.com/patrimart/ngix-demo-todo) with the Todo List demo.
 
@@ -116,12 +121,7 @@ It is an Angular CLI app. After `npm install`, start it with `ng serve`. This as
 `@angular/cli` installed globally.
 
 
-### Documentation
-
-See the Wiki for detailed documentation.
-
-
-### Todos
+### Library Todos
 
 - Add unit tests with 90+% coverage.
 - Test `IxStoreModule.forFeature()` with lazy loading.
