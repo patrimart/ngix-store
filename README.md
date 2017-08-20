@@ -1,8 +1,6 @@
 # @ngix/store
 
-### NOT FOR PRODUCTION USE.
-
-IxJS augmented state management for Angular applications, inspired by Redux and built upon [@ngrx](https://github.com/ngrx/platform).
+[IxJS](https://github.com/ReactiveX/IxJS) augmented state management for Angular applications, inspired by Redux and built upon [@ngrx](https://github.com/ngrx/platform).
 
 `@ngix/store` is an attempt to implement an even more functional approach to `@ngrx`. This library is not a replacement for `@ngrx`, but rather a companion library.
 
@@ -16,11 +14,17 @@ Core tenents:
 - Stay small and simple.
 - Functions, functions, functions.
 
+
 ### Installation
 
-Install @ngix/store from npm:
+Install @ngix/store and IxJS from npm:
 
 `npm i -S @ngix/store ix`
+
+Note: Currently, IxJS does not play well with Angular CLI. While I expect this to change shortly,
+there is a workaround in the Todo Demo Project that involves cloning the repo and adding a path
+to the `tsconfig.json` file.
+
 
 ### Setup
 
@@ -64,12 +68,12 @@ export interface AppState {
   counter: number;
 }
 
-export const lmap = ix.lift<number>(map);
-export const INCREMENT = lmap(i => i + 1);
-export const DECREMENT = lmap(i => i - 1);
-export const RESET = lmap(() => 0);
-export const cl = lens.lens("counter");
-export const ca = ixAction(counterLens);
+const lmap = ix.lift<number>(map);
+const INCREMENT = lmap(i => i + 1);
+const DECREMENT = lmap(i => i - 1);
+const RESET = ix.constant(0);
+const cl = lens.lens("counter");
+const ca = ixAction(counterLens);
 
 @Component({
   selector: "app-root",
@@ -103,9 +107,17 @@ export class AppComponent {
 }
 ```
 
+
 ### More Docs and Examples Coming Soon
 
 Stay tuned...
+
+
+### Todos
+
+- Add unit tests with 90+% coverage.
+- Test `IxStoreModule.forFeature()` with lazy loading.
+
 
 ---
 

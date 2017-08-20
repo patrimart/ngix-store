@@ -4,8 +4,8 @@ import { of } from "ix/iterable/of";
 import { from } from "ix/iterable/from";
 
 import { IxFunction } from "./interfaces";
+import { identity } from "./funcs";
 
-const DEFAULT_FN: IxFunction<any, any> = id => from(id);
 
 /**
  * Bind an array of curried IX operators.
@@ -83,7 +83,7 @@ export function bindOf  <S, A = S, B = S, C = S, D = S, E = S, F = S, G = S, H =
 ): (...args: S[]) => IterableX<R>;
 
 export function bindOf <S, R = S> (...fns: Array<IxFunction<any, any>>): (...args: S[]) => IterableX<R> {
-    fns = fns.length === 0 ? [DEFAULT_FN] : fns;
+    fns = fns.length === 0 ? [identity()] : fns;
     return function (...args: S[]): IterableX<R> {
         return fns.reduce((s, f) => s.chain(ss => f(ss)), from(args));
     }

@@ -2,13 +2,12 @@
 /**
  * Lens type for convenience.
  */
-export type Lens = (string | number)[];
+export type Lens = Array<string | number>;
 
 /**
  * Create a lens that can set/get into an object. Lens are composable with this function.
  */
-export function lens (...props: (string | number)[]): Lens;
-// tslint:disable-next-line:unified-signatures
+export function lens (...props: Lens): Lens;
 export function lens (...lenses: Lens[]): Lens;
 export function lens (...args: any[]): Lens {
 
@@ -17,7 +16,6 @@ export function lens (...args: any[]): Lens {
     }
     return args.reduce((p, c) => p.concat(c || []), []);
 }
-
 
 /**
  * Builds a curried function to get the value of the lens focus.
@@ -72,7 +70,10 @@ export function over <S> (lns: Lens) {
     }
 }
 
-
+/**
+ * Builds a curried function to delete the key at the lens focus.
+ * If the path of the lens is not valid, the same state reference is returned.
+ */
 export function del <S> (lns: Lens) {
 
     return (state: S): S => {
@@ -82,9 +83,7 @@ export function del <S> (lns: Lens) {
 
         for (let i = 0, len = lns.length; i < len; i++) {
             const k = lns[i];
-            if (k in ms === false) {
-                ms[k] = typeof lns[i + 1] === "number" ? [] : {};
-            }
+            if (k in ms === false) { return state; }
             if (len - i - 1) {
                 ms = ms[k] = Object.freeze(Array.isArray(ms[k]) ? ms[k].slice(0) : { ...ms[k] });
             } else {

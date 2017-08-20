@@ -8,7 +8,7 @@ import { map } from "ix/iterable/map";
 import { IxStore } from "../store/ixstore";
 import { ixAction, IxAction } from "../store/models";
 import { lens  } from "../store/lens";
-import { bindFrom as bf, lift } from "../store/ix";
+import { bindFrom as bf, lift, constant } from "../store/ix";
 
 
 export interface AppState {
@@ -16,11 +16,12 @@ export interface AppState {
 }
 
 
-export const cl = lens("counter");
-export const ca = ixAction(cl);
-export const INCREMENT = lift<number>(map)(i => i + 1);
-export const DECREMENT = lift<number>(map)(i => i - 1);
-export const RESET = lift<number>(map)(() => 0);
+const cl = lens("counter");
+const ca = ixAction(cl);
+const lmap = lift<number>(map);
+const INCREMENT = lmap(i => i + 1);
+const DECREMENT = lmap(i => i - 1);
+const RESET = constant(0);
 
 
 @Component({
