@@ -4,5 +4,5 @@ export default {
   format: 'es',
   dest: './package/bundle/ngixstore.es5.js',
   sourceMap: true,
-  external: id => ["@angular", "rxjs", "@ngrx", "@ngix"].reduce((p, c) => p || id.startsWith(c), false)
+  external: id => ["@angular", "rxjs", "@ngrx", "@reactivex"].reduce((p, c) => p || id.startsWith(c), false)
 };

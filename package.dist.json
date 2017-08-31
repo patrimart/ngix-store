@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "author": "Patrick Martin",
   "main": "./bundle/ngixstore.umd.js",
@@ -8,6 +8,12 @@
   "module": "./bundle/ngixstore.es5.js",
   "es2015": "./index.js",
   "private": false,
+  "peerDependencies": {
+    "@angular/core": "^4.3.0",
+    "@ngrx/store": "^4.0.0",
+    "@reactivex/ix-ts": "^2.0.3",
+    "rxjs": "^5.4.0"
+  },
   "publishConfig": {
     "access": "public"
   }

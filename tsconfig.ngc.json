@@ -20,10 +20,7 @@
       "es2015",
       "esnext.asynciterable",
       "dom"
-    ],
-    "paths": {
-      "ix/*": ["../node_modules/@reactivex/ix-ts/*"]
-    }
+    ]
   },
   "include": [
     "./src/store/**/*"

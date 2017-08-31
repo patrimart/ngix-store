@@ -1,7 +1,7 @@
 
-import { IterableX } from "ix/iterable";
-import { of } from "ix/iterable/of";
-import { from } from "ix/iterable/from";
+import { IterableX } from "@reactivex/ix-ts/iterable";
+import { of } from "@reactivex/ix-ts/iterable/of";
+import { from } from "@reactivex/ix-ts/iterable/from";
 
 import { IxFunction } from "./interfaces";
 import { identity } from "./funcs";

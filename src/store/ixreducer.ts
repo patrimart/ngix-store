@@ -1,7 +1,7 @@
 
 import { Action, ActionReducer } from "@ngrx/store";
 
-import { of } from "ix/iterable/of";
+import { of } from "@reactivex/ix-ts/iterable/of";
 
 import { set, view } from "./lens";
 

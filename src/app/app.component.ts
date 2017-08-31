@@ -2,8 +2,8 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
-import { IterableX } from "ix/iterable";
-import { map } from "ix/iterable/map";
+import { IterableX } from "@reactivex/ix-ts/iterable";
+import { map } from "@reactivex/ix-ts/iterable/map";
 
 import { IxStore } from "../store/ixstore";
 import { ixAction, IxAction } from "../store/models";

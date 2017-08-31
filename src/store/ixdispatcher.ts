@@ -20,11 +20,11 @@ import "rxjs/add/operator/throttleTime";
 import "rxjs/add/operator/toPromise";
 import "rxjs/add/operator/withLatestFrom";
 
-import { IterableX } from "ix/iterable";
-import { of }        from "ix/iterable/of";
-import "ix/add/iterable-operators/chain";
-import "ix/add/iterable-operators/map";
-import "ix/add/iterable-operators/reduce";
+import { IterableX } from "@reactivex/ix-ts/iterable";
+import { of }        from "@reactivex/ix-ts/iterable/of";
+import "@reactivex/ix-ts/add/iterable-operators/chain";
+import "@reactivex/ix-ts/add/iterable-operators/map";
+import "@reactivex/ix-ts/add/iterable-operators/reduce";
 
 import { ActionsSubject, StateObservable } from "@ngrx/store";
 

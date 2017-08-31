@@ -1,5 +1,5 @@
 
-import { IterableX } from "ix/iterable";
+import { IterableX } from "@reactivex/ix-ts/iterable";
 
 import { IxFunction } from "./interfaces";
 

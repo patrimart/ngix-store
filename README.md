@@ -19,29 +19,22 @@ Core tenents:
 
 Install @ngix/store from npm:
 
-`npm i -S @ngix/store ix`
+`npm i -S @ngix/store @reactivex/ix-ts`
 
-Or, if in an Angular/CLI project:
-
-`npm i -S @ngix/store @reactive/ix-ts`
-
-Note: to import [`@reactive/ix-ts`](https://www.npmjs.com/package/@reactivex/ix-ts) like it's the `ix` module, add the following to the `tsconfig.json` file:
+To import [`@reactivex/ix-ts`](https://www.npmjs.com/package/@reactivex/ix-ts) like it's the `ix` module, add the following to the `tsconfig.json` file:
 
 ```json
 {
   "compilerOptions": {
-    "importHelpers": true, /* <-- optional but recommended */
-    "noEmitHelpers": true, /* <-- optional but recommended */
-    "downlevelIteration": true,
+    /* ... */
     "paths": {
       "ix/*": ["../node_modules/@reactivex/ix-ts/*"]
-    },
-    "lib": [
-      "esnext.asynciterable" /* <-- in addition to any other "lib" entries you have */
-    ]
+    }
   }
 }
 ```
+
+Note: It's probably safer to just stick with `@reactivex/ix-ts` despite it's long name.
 
 
 ### Documentation

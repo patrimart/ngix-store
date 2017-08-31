@@ -8,7 +8,6 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
     "strict": true,
     "target": "es2015",
     "typeRoots": [
@@ -18,10 +17,7 @@
       "es2015",
       "esnext.asynciterable",
       "dom"
-    ],
-    "paths": {
-      "ix/*": ["../node_modules/@reactivex/ix-ts/*"]
-    }
+    ]
   },
   "include": [
     "./src/**/*"
