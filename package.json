@@ -1,6 +1,6 @@
 {
   "name": "@ngix/store",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "author": "Patrick Martin",
   "scripts": {
@@ -12,8 +12,9 @@
     "e2e": "ng e2e",
     "_package": "rm -rf ./package && ./node_modules/.bin/ngc -p tsconfig.ngc.json",
     "_copy": "cp ./package.dist.json ./package/package.json && cp ./README.md ./package",
+    "_move": "mv ./package/src/store/* ./package && rm -rf ./package/src && rm -rf ./package/node_modules",
     "_rollup": "./node_modules/.bin/rollup -c rollup.es5.js && ./node_modules/.bin/rollup -c rollup.umd.js",
-    "dist": "npm run _package && npm run _copy && npm run _rollup"
+    "dist": "npm run _package && npm run _copy && npm run _move && npm run _rollup"
   },
   "private": true,
   "peerDependencies": {
