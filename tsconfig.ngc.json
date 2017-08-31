@@ -17,11 +17,12 @@
       "node_modules/@types"
     ],
     "lib": [
-      "esnext",
+      "es2015",
+      "esnext.asynciterable",
       "dom"
     ],
     "paths": {
-      "ix/*": ["../IxJS/src/*"]
+      "ix/*": ["../node_modules/@reactivex/ix-ts/*"]
     }
   },
   "include": [

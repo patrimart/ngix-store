@@ -17,13 +17,31 @@ Core tenents:
 
 ### Installation
 
-Install @ngix/store and IxJS from npm:
+Install @ngix/store from npm:
 
 `npm i -S @ngix/store ix`
 
-Note: Currently, IxJS does not play well with Angular CLI. While I expect this to change shortly,
-there is a workaround in the Todo Demo Project that involves cloning the repo and adding a path
-to the `tsconfig.json` file.
+Or, if in an Angular/CLI project:
+
+`npm i -S @ngix/store @reactive/ix-ts`
+
+Note: to import [`@reactive/ix-ts`](https://www.npmjs.com/package/@reactivex/ix-ts) like it's the `ix` module, add the following to the `tsconfig.json` file:
+
+```json
+{
+  "compilerOptions": {
+    "importHelpers": true, /* <-- optional but recommended */
+    "noEmitHelpers": true, /* <-- optional but recommended */
+    "downlevelIteration": true,
+    "paths": {
+      "ix/*": ["../node_modules/@reactivex/ix-ts/*"]
+    },
+    "lib": [
+      "esnext.asynciterable" /* <-- in addition to any other "lib" entries you have */
+    ]
+  }
+}
+```
 
 
 ### Documentation
