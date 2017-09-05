@@ -7,8 +7,9 @@ import { of }        from "@reactivex/ix-ts/iterable/of";
 
 import { Action } from "@ngrx/store";
 
+import { Lens } from "@ngix/lens";
+
 import { IxFunction } from "./ix";
-import { Lens } from "./lens";
 
 export const ACTION = "[@ngix/store/action]";
 

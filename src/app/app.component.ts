@@ -5,9 +5,10 @@ import { Observable } from "rxjs/Observable";
 import { IterableX } from "@reactivex/ix-ts/iterable";
 import { map } from "@reactivex/ix-ts/iterable/map";
 
+import { lens } from "@ngix/lens";
+
 import { IxStore } from "../store/ixstore";
 import { ixAction, IxAction } from "../store/models";
-import { lens  } from "../store/lens";
 import { bindFrom as bf, lift, constant } from "../store/ix";
 
 

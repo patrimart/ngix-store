@@ -3,7 +3,7 @@ import { Action, ActionReducer } from "@ngrx/store";
 
 import { of } from "@reactivex/ix-ts/iterable/of";
 
-import { set, view } from "./lens";
+import { set, view } from "@ngix/lens";
 
 import { IxAction, ACTION } from "./models";
 

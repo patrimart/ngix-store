@@ -28,7 +28,8 @@ import "@reactivex/ix-ts/add/iterable-operators/reduce";
 
 import { ActionsSubject, StateObservable } from "@ngrx/store";
 
-import { view, Lens } from "./lens";
+import { Lens, view } from "@ngix/lens";
+
 import { ixAction, IxAction } from "./models";
 
 

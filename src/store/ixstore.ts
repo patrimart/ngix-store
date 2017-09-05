@@ -7,8 +7,9 @@ import "rxjs/add/operator/map";
 
 import { Action, Store, StateObservable, ActionsSubject, ReducerManager } from "@ngrx/store";
 
+import { Lens, view } from "@ngix/lens";
+
 import { IxDispatcher }               from "./ixdispatcher";
-import { view, Lens }                 from "./lens";
 import { ixAction, IxAction, ACTION } from "./models";
 
 

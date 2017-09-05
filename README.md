@@ -17,9 +17,9 @@ Core tenents:
 
 ### Installation
 
-Install @ngix/store from npm:
+Install @ngix/store (and dependencies) from npm:
 
-`npm i -S @ngix/store @reactivex/ix-ts`
+`npm i -S @ngix/store @ngix/lens @reactivex/ix-ts`
 
 To import [`@reactivex/ix-ts`](https://www.npmjs.com/package/@reactivex/ix-ts) like it's the `ix` module, add the following to the `tsconfig.json` file:
 
@@ -78,7 +78,8 @@ import { Observable } from "rxjs/Observable";
 import { IterableX } from "ix/iterable";
 import { map } from "ix/iterable/map";
 
-import { IxStore, ixAction, IxAction, lens, ix } from "@ngix/store";
+import { IxStore, ixAction, IxAction, ix } from "@ngix/store";
+import { lens } from "@ngix/lens";
 
 export interface AppState {
   counter: number;
